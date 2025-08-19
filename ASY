@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. ASY MedHub</title>
+    <!-- Favicon for the browser tab -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230ea5e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucude-stethoscope'><path d='M20 9h-4m4 0c1.1 0 2 .9 2 2v3c0 1.1-.9 2-2 2h-4m4-4H4m0 0v-2c0-1.1.9-2 2-2h2m0 0h4m-4 0v-2c0-1.1.9-2 2-2h2m0 0c1.1 0 2 .9 2 2v3c0 1.1-.9 2-2 2h-4M7 16a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM17 16a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z'/></svg>" type="image/svg+xml">
+    <!-- Use Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use the Inter font for a clean, modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f9ff; /* Tailwind's sky-50 */
+            /* Watermark background */
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100%' height='100%' opacity='0.25'><text x='50%' y='50%' font-family='Inter' font-size='100' fill='rgb(180, 210, 230)' transform='rotate(-25 50 50)' text-anchor='middle'>Dr. ASY MedHub</text></svg>");
+            background-repeat: repeat;
+            background-attachment: fixed;
+            background-size: 500px 300px;
+        }
+        /* Mobile menu specific styles */
+        .mobile-menu {
+            transition: transform 0.3s ease-in-out;
+            transform: translateY(-100%);
+        }
+        .mobile-menu.open {
+            transform: translateY(0);
+        }
+        /* Smooth scrolling behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Custom animation for the doctor icon */
+        @keyframes doctor-walk {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-3px) rotate(2deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        /* New animation for the studying motion */
+        @keyframes doctor-study {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-5deg); }
+        }
+        .doctor-icon {
+            display: inline-block;
+            /* Applying both animations simultaneously */
+            animation: doctor-walk 1.5s infinite alternate ease-in-out, doctor-study 2s infinite alternate ease-in-out;
+            transform-origin: bottom center;
+        }
+        /* Page transition animation */
+        .page-content {
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .page-content.hidden {
+            opacity: 0;
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <!-- Left Side: Logo only -->
+            <div class="flex items-center space-x-2">
+                <!-- Animated Book Icon Only -->
+                <span class="doctor-icon text-3xl">📚</span>
+                <!-- Logo/Site Title -->
+                <a href="#" id="home-logo" class="text-2xl font-bold text-slate-800">
+                    Dr. ASY MedHub
+                </a>
+            </div>
+            <!-- Right Side: Navigation, Search, and Log In -->
+            <div class="flex items-center space-x-4">
+                <!-- Navigation Menu (Desktop Only) -->
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#hero" class="nav-link text-slate-600 hover:text-sky-600 transition-colors">Home</a>
+                    <a href="#modules" class="nav-link text-slate-600 hover:text-sky-600 transition-colors">Modules</a>
+                    <a href="#pricing" class="nav-link text-slate-600 hover:text-sky-600 transition-colors">Pricing</a>
+                    <a href="#contact" class="nav-link text-slate-600 hover:text-sky-600 transition-colors">Contact</a>
+                </nav>
+                <!-- Search Bar -->
+                <div class="relative hidden md:block">
+                    <input type="text" placeholder="Search modules..." class="py-2 pl-10 pr-4 rounded-full border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full sm:w-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <!-- Log In Button -->
+                <a href="#" class="hidden md:block bg-sky-600 text-white font-semibold py-2 px-6 rounded-full shadow-md hover:bg-sky-700 transition-colors">
+                    Log In
+                </a>
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden text-slate-600 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu absolute top-full left-0 w-full bg-white shadow-lg py-4 md:hidden">
+            <nav class="flex flex-col items-center space-y-4">
+                <a href="#hero" class="nav-link text-slate-600 hover:text-sky-600 transition-colors w-full text-center py-2">Home</a>
+                <a href="#modules" class="nav-link text-slate-600 hover:text-sky-600 transition-colors w-full text-center py-2">Modules</a>
+                <a href="#pricing" class="nav-link text-slate-600 hover:text-sky-600 transition-colors w-full text-center py-2">Pricing</a>
+                <a href="#contact" class="nav-link text-slate-600 hover:text-sky-600 transition-colors w-full text-center py-2">Contact</a>
+                <a href="#" class="bg-sky-600 text-white font-semibold py-2 px-6 rounded-full shadow-md hover:bg-sky-700 transition-colors w-1/2 text-center">
+                    Log In
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Wrapper -->
+    <div id="main-content-wrapper" class="page-content">
+        <!-- Hero Section -->
+        <section id="hero" class="bg-sky-600 text-white py-16 md:py-24">
+            <div class="container mx-auto px-4 text-center">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-4">
+                    Your Journey to Medical Excellence
+                </h1>
+                <p class="text-lg md:text-xl max-w-2xl mx-auto mb-8 opacity-90">
+                    Master complex concepts and ace your exams with our comprehensive, easy-to-digest learning modules.
+                </p>
+                <a href="#modules" class="bg-white text-sky-600 font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+                    Start Learning
+                </a>
+            </div>
+        </section>
+
+        <!-- Learning Modules Section -->
+        <section id="modules" class="py-16 md:py-24">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
+                    Core Learning Modules
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Module Card 1: Anatomy -->
+                    <a href="#" id="show-anatomy-page" class="block bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                        <div class="text-sky-600 mb-4">
+                            <!-- Anatomy-themed icon (e.g., heart) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-center">Human Anatomy</h3>
+                        <p class="text-center text-slate-600">
+                            Dive deep into the structures and systems of the human body with interactive lessons.
+                        </p>
+                    </a>
+                    <!-- Module Card 2: Pharmacology -->
+                    <a href="#" id="show-pharmacology-page" class="block bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                        <div class="text-sky-600 mb-4">
+                            <!-- Pharmacology-themed icon (e.g., pill bottle) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10m0 0a2 2 10 2m-2-2h-6a2 2 0 00-2 2v10a2 2 0 002 2h6a2 2 0 002-2v-10a2 2 0 00-2-2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-center">Pharmacology</h3>
+                        <p class="text-center text-slate-600">
+                            Understand drug mechanisms, effects, and clinical applications in a clear, concise way.
+                        </p>
+                    </a>
+                    <!-- Module Card 3: Clinical Skills -->
+                    <a href="#clinical-module" class="block bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                        <div class="text-sky-600 mb-4">
+                            <!-- Clinical skills icon (e.g., clipboard with checkmark) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 5a2 2 0 002 2h2a2 2 0 002-2" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-center">Clinical Skills</h3>
+                        <p class="text-center text-slate-600">
+                            Build confidence in patient care, diagnostics, and essential practical procedures.
+                        </p>
+                    </a>
+                    <!-- Module Card 4: Pathology -->
+                    <a href="#pathology-module" class="block bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                        <div class="text-sky-600 mb-4">
+                            <!-- Pathology-themed icon (e.g., microscope) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 18a6 6 0 100-12 6 6 0 000 12z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11l-3 3-2-2m-1 1l-1 1-2-2" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21v-4m0-7V3" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-center">Pathology</h3>
+                        <p class="text-center text-slate-600">
+                            Study the causes and effects of diseases to understand their impact on the human body.
+                        </p>
+                    </a>
+                    <!-- Module Card 5: Physiology -->
+                    <a href="#physiology-module" class="block bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                        <div class="text-sky-600 mb-4">
+                            <!-- Physiology-themed icon (e.g., brain/head with gears) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l-3 3-2-2m5-5l3-3 2 2m5 5l-3-3-2 2m-1 1l-1 1m-1 1l-1 1m-1 1l-1 1m-1 1l-1 1" />
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-center">Physiology</h3>
+                        <p class="text-center text-slate-600">
+                            Explore the mechanical, physical, and biochemical functions of living organisms and their systems.
+                        </p>
+                    </a>
+                    <!-- Module Card 6: Paediatrics -->
+                    <a href="#paediatrics-module" class="block bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                        <div class="text-sky-600 mb-4">
+                            <!-- Paediatrics-themed icon (e.g., baby face) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z" />
+                                <path d="M10 10a.5.5 0 100 1 .5.5 0 000-1z" />
+                                <path d="M14 10a.5.5 0 100 1 .5.5 0 000-1z" />
+                                <path d="M9 14h6a2 2 0 01-2 2H11a2 2 0 01-2-2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-center">Paediatrics</h3>
+                        <p class="text-center text-slate-600">
+                            Focus on the health and medical care of infants, children, and adolescents.
+                        </p>
+                    </a>
+                    <!-- Module Card 7: Microbiology -->
+                    <a href="#microbiology-module" class="block bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                        <div class="text-sky-600 mb-4">
+                            <!-- Microbiology-themed icon (e.g., petri dish) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z" />
+                                <path d="M12 17a4 4 0 100-8 4 4 0 000 8z" />
+                                <path d="M12 15a2 2 0 100-4 2 2 0 000 4z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-center">Microbiology</h3>
+                        <p class="text-center text-slate-600">
+                            Study microorganisms, including bacteria, fungi, viruses, and their effects on health.
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="py-16 md:py-24 bg-sky-50">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
+                    What Our Students Say
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Testimonial 1 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <p class="text-slate-600 italic mb-4">
+                            "MedEd Hub has been a game-changer for my studies. The modules are incredibly clear and the interactive content made learning complex topics so much easier."
+                        </p>
+                        <div class="flex items-center">
+                            <img src="https://placehold.co/40x40/c0d9e8/4f6d8c?text=A" alt="Student A" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <p class="font-semibold text-sky-600">Alex P.</p>
+                                <p class="text-sm text-slate-500">Medical Student</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonial 2 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <p class="text-slate-600 italic mb-4">
+                            "The pharmacology course was a lifesaver. The way they break down the information is fantastic. I highly recommend it to anyone in healthcare."
+                        </p>
+                        <div class="flex items-center">
+                            <img src="https://placehold.co/40x40/c0d9e8/4f6d8c?text=B" alt="Student B" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <p class="font-semibold text-sky-600">Maria S.</p>
+                                <p class="text-sm text-slate-500">Nursing Professional</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 md:py-24">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
+                    Get in Touch
+                </h2>
+                <div class="max-w-xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+                    <form action="https://formsubmit.co/YOUR_EMAIL_ADDRESS" method="POST">
+                        <div class="mb-4">
+                            <label for="name" class="block text-slate-700 font-semibold mb-2">Name</label>
+                            <input type="text" id="name" name="name" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-slate-700 font-semibold mb-2">Email</label>
+                            <input type="email" id="email" name="email" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        </div>
+                        <div class="mb-4">
+                            <label for="message" class="block text-slate-700 font-semibold mb-2">Message</label>
+                            <textarea id="message" name="message" rows="4" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="bg-sky-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-sky-700 transition-colors">
+                                Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div> <!-- End of Main Content Wrapper -->
+
+    <!-- Anatomy Page Content - Initially Hidden -->
+    <div id="anatomy-page-content" class="page-content hidden py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <button id="back-to-main" class="flex items-center mb-8 text-sky-600 font-semibold hover:text-sky-800 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Main Page
+            </button>
+            <h1 class="text-4xl md:text-5xl font-bold text-center text-slate-800 mb-8">Human Anatomy</h1>
+            <p class="text-lg text-center text-slate-600 max-w-3xl mx-auto mb-12">
+                Welcome to the comprehensive Human Anatomy module. Here you'll explore the intricate structures and systems that make up the human body.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Sub-Module Card: Skeletal System - Now a clickable link -->
+                <a href="#" id="show-skeletal-system-page" class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                    <h3 class="text-xl font-semibold text-sky-600 mb-2">Skeletal System</h3>
+                    <p class="text-slate-600 mb-4">
+                        Learn about bones, joints, and the functions of the human skeleton. Includes interactive bone identification and 3D models.
+                    </p>
+                </a>
+                <!-- Sub-Module Card: Muscular System -->
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-semibold text-sky-600 mb-2">Muscular System</h3>
+                    <p class="text-slate-600 mb-4">
+                        Explore the different types of muscles, their locations, and how they work together for movement.
+                    </p>
+                </div>
+                <!-- Sub-Module Card: Cardiovascular System -->
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-semibold text-sky-600 mb-2">Cardiovascular System</h3>
+                    <p class="text-slate-600 mb-4">
+                        Study the heart, blood vessels, and blood, understanding how they transport nutrients and oxygen throughout the body.
+                    </p>
+                </div>
+                <!-- Sub-Module Card: Nervous System -->
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-semibold text-sky-600 mb-2">Nervous System</h3>
+                    <p class="text-slate-600 mb-4">
+                        A detailed look at the brain, spinal cord, and nerves, explaining how they control and coordinate all bodily functions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pharmacology Page Content - Initially Hidden -->
+    <div id="pharmacology-page-content" class="page-content hidden py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <button id="back-to-main-from-pharma" class="flex items-center mb-8 text-sky-600 font-semibold hover:text-sky-800 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Main Page
+            </button>
+            <h1 class="text-4xl md:text-5xl font-bold text-center text-slate-800 mb-8">Pharmacology</h1>
+            <p class="text-lg text-center text-slate-600 max-w-3xl mx-auto mb-12">
+                Welcome to the Pharmacology module. Here you'll explore the study of drugs, their actions, and their effects on living organisms.
+            </p>
+            
+            <div class="bg-white p-8 rounded-xl shadow-lg max-w-4xl mx-auto">
+                <!-- Overview Section -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold text-sky-600 mb-4">Introduction to Pharmacology</h3>
+                    <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
+                        <p class="text-lg text-slate-700 flex-1">
+                            Pharmacology is the branch of medicine and biology concerned with the study of drug action, where a drug can be broadly defined as any artificial, natural, or endogenous substance which exerts a biochemical or physiological effect on the cell, tissue, organ, or organism.
+                        </p>
+                        <div class="flex-shrink-0">
+                            <img src="https://placehold.co/400x300/cbe5fa/0ea5e9?text=Drug+Molecule" alt="Diagram of a drug molecule" class="rounded-xl shadow-md">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pharmacodynamics Section -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold text-sky-600 mb-4">Pharmacodynamics: What the drug does to the body</h3>
+                    <p class="text-lg text-slate-700 mb-4">
+                        This involves the study of the biochemical, cellular, and physiological effects of drugs and their mechanism of action.
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><strong>Receptors:</strong> Most drugs work by binding to specific receptor molecules on or within a cell.</li>
+                        <li><strong>Agonist:</strong> A drug that binds to a receptor and activates it to produce a biological response.</li>
+                        <li><strong>Antagonist:</strong> A drug that binds to a receptor but does not activate it, thereby blocking an agonist's action.</li>
+                    </ul>
+                </div>
+
+                <!-- Pharmacokinetics Section -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold text-sky-600 mb-4">Pharmacokinetics: What the body does to the drug</h3>
+                    <p class="text-lg text-slate-700 mb-4">
+                        This is the study of how the body absorbs, distributes, metabolizes, and excretes a drug. This is often summarized by the acronym **ADME**.
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><strong>Absorption:</strong> The movement of a drug from its site of administration into the bloodstream.</li>
+                        <li><strong>Distribution:</strong> The transport of the drug by the bloodstream to its target tissues and organs.</li>
+                        <li><strong>Metabolism:</strong> The process by which the body chemically alters the drug, primarily in the liver.</li>
+                        <li><strong>Excretion:</strong> The elimination of the drug from the body, typically by the kidneys.</li>
+                    </ul>
+                </div>
+
+                <!-- Clinical Applications Section -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold text-sky-600 mb-4">Clinical Applications</h3>
+                    <div class="bg-sky-50 p-6 rounded-lg shadow-inner">
+                        <p class="text-lg text-slate-700">
+                            Understanding pharmacology is crucial for prescribing drugs, determining correct dosages, and predicting potential side effects or drug interactions. It is the foundation of rational drug therapy in all fields of medicine.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Skeletal System Page Content - Initially Hidden -->
+    <div id="skeletal-system-page-content" class="page-content hidden py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <button id="back-to-anatomy" class="flex items-center mb-8 text-sky-600 font-semibold hover:text-sky-800 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Anatomy
+            </button>
+            <h1 class="text-4xl md:text-5xl font-bold text-center text-slate-800 mb-8">The Skeletal System</h1>
+            <div class="bg-white p-8 rounded-xl shadow-lg max-w-4xl mx-auto">
+                <!-- Overview Section -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold text-sky-600 mb-4">Skeletal System Overview</h3>
+                    <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
+                        <p class="text-lg text-slate-700 flex-1">
+                            The skeletal system is the structural framework of the human body. It is made up of bones, cartilage, ligaments, and joints, all working together to provide shape, support, protection, and movement. The average adult human skeleton consists of 206 bones, while infants are born with around 270 bones, some of which fuse as they grow.
+                        </p>
+                        <div class="flex-shrink-0">
+                            <img src="https://placehold.co/400x500/cbe5fa/0ea5e9?text=Human+Skeleton" alt="Diagram of the Human Skeleton" class="rounded-xl shadow-md">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Major Functions Section -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold text-sky-600 mb-4">Major Functions of the Skeletal System</h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><strong>Support:</strong> Provides the rigid framework that supports the body and maintains its shape.</li>
+                        <li><strong>Movement:</strong> Bones act as levers, while muscles attached to them via tendons allow motion.</li>
+                        <li><strong>Protection:</strong> Vital organs are shielded by bones (e.g., skull protects the brain, rib cage protects heart and lungs).</li>
+                        <li><strong>Mineral Storage:</strong> Bones store essential minerals, especially calcium and phosphorus, which can be released into the bloodstream as needed.</li>
+                        <li><strong>Blood Cell Production (Hematopoiesis):</strong> The red bone marrow inside certain bones produces red blood cells, white blood cells, and platelets.</li>
+                        <li><strong>Energy Storage:</strong> Yellow bone marrow stores fat, which serves as an energy reserve.</li>
+                    </ul>
+                </div>
+
+                <!-- Divisions Section -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold text-sky-600 mb-4">Divisions of the Skeleton</h3>
+                    <p class="text-lg text-slate-700 mb-4">
+                        The human skeleton is divided into two main parts:
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-sky-50 p-6 rounded-lg shadow-inner">
+                            <h4 class="text-xl font-semibold text-sky-700 mb-2">1. Axial Skeleton (80 bones)</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-600">
+                                <li>Forms the central axis of the body.</li>
+                                <li>Includes: Skull (22 bones), Vertebral Column (26 bones), Rib Cage (24 ribs + sternum).</li>
+                                <li><strong>Function:</strong> Protects the brain, spinal cord, heart, and lungs.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-sky-50 p-6 rounded-lg shadow-inner">
+                            <h4 class="text-xl font-semibold text-sky-700 mb-2">2. Appendicular Skeleton (126 bones)</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-600">
+                                <li>Forms the limbs and girdles.</li>
+                                <li>Includes: Pectoral and Pelvic Girdles, Upper and Lower Limbs.</li>
+                                <li><strong>Function:</strong> Enables movement and locomotion.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Types of Bones Section -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold text-sky-600 mb-4">Types of Bones</h3>
+                    <p class="text-lg text-slate-700 mb-4">
+                        Bones are classified by shape and structure:
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-slate-600">
+                        <p><strong>Long Bones:</strong> Support weight and enable movement (e.g., femur, humerus).</p>
+                        <p><strong>Short Bones:</strong> Provide stability with limited movement (e.g., carpals, tarsals).</p>
+                        <p><strong>Flat Bones:</strong> Protect organs and provide surfaces for muscle attachment (e.g., skull, sternum).</p>
+                        <p><strong>Irregular Bones:</strong> Complex shapes with specialized functions (e.g., vertebrae, mandible).</p>
+                        <p><strong>Sesamoid Bones:</strong> Small, round bones embedded in tendons (e.g., patella).</p>
+                    </div>
+                </div>
+
+                <!-- Joints Section -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold text-sky-600 mb-4">Joints of the Skeletal System</h3>
+                    <p class="text-lg text-slate-700 mb-4">
+                        Joints (articulations) are where two or more bones meet. They allow different types of movement:
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><strong>Fibrous Joints:</strong> Immovable (e.g., skull sutures).</li>
+                        <li><strong>Cartilaginous Joints:</strong> Slightly movable (e.g., intervertebral discs).</li>
+                        <li><strong>Synovial Joints:</strong> Freely movable and most common (e.g., knee, shoulder, hip).</li>
+                    </ul>
+                </div>
+
+                <!-- Bone Composition & Health Section -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold text-sky-600 mb-4">Bone Composition & Health</h3>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-1">
+                            <h4 class="text-xl font-semibold text-sky-700 mb-2">Bone Composition</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-600">
+                                <li><strong>Compact Bone:</strong> Dense outer layer providing strength.</li>
+                                <li><strong>Spongy Bone:</strong> Lightweight inner structure containing red marrow.</li>
+                                <li><strong>Bone Marrow:</strong> Red marrow produces blood cells; yellow marrow stores fat.</li>
+                            </ul>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-xl font-semibold text-sky-700 mb-2">Tips for Healthy Bones</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-600">
+                                <li>Eat a balanced diet rich in calcium and vitamin D.</li>
+                                <li>Engage in weight-bearing exercise like walking or running.</li>
+                                <li>Avoid smoking and excessive alcohol.</li>
+                                <li>Maintain proper posture and body weight.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer Section -->
+    <footer class="bg-slate-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center text-sm opacity-70">
+            <div class="flex flex-col md:flex-row justify-center space-y-2 md:space-y-0 md:space-x-8 mb-4">
+                <a href="#" class="hover:text-sky-400 transition-colors">About Us</a>
+                <a href="#" class="hover:text-sky-400 transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-sky-400 transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-sky-400 transition-colors">Blog</a>
+            </div>
+            <p>&copy; 2024 MedEd Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for page navigation, mobile menu and smooth scrolling -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const showAnatomyPageButton = document.getElementById('show-anatomy-page');
+            const showSkeletalSystemPageButton = document.getElementById('show-skeletal-system-page');
+            const showPharmacologyPageButton = document.getElementById('show-pharmacology-page');
+            const backToMainButton = document.getElementById('back-to-main');
+            const backToAnatomyButton = document.getElementById('back-to-anatomy');
+            const backToMainFromPharmaButton = document.getElementById('back-to-main-from-pharma');
+            const mainContentWrapper = document.getElementById('main-content-wrapper');
+            const anatomyPage = document.getElementById('anatomy-page-content');
+            const skeletalSystemPage = document.getElementById('skeletal-system-page-content');
+            const pharmacologyPage = document.getElementById('pharmacology-page-content');
+
+            // Function to handle page transitions
+            function showPage(pageToShow) {
+                const pages = [mainContentWrapper, anatomyPage, skeletalSystemPage, pharmacologyPage];
+                pages.forEach(page => {
+                    if (page === pageToShow) {
+                        page.classList.remove('hidden');
+                        setTimeout(() => page.style.opacity = '1', 10);
+                    } else {
+                        page.style.opacity = '0';
+                        setTimeout(() => page.classList.add('hidden'), 500);
+                    }
+                });
+            }
+
+            // Mobile menu toggle functionality
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Event listeners for page navigation
+            if (showAnatomyPageButton) {
+                showAnatomyPageButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(anatomyPage);
+                });
+            }
+
+            if (showSkeletalSystemPageButton) {
+                showSkeletalSystemPageButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(skeletalSystemPage);
+                });
+            }
+
+            if (showPharmacologyPageButton) {
+                showPharmacologyPageButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(pharmacologyPage);
+                });
+            }
+
+            if (backToMainButton) {
+                backToMainButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(mainContentWrapper);
+                });
+            }
+
+            if (backToAnatomyButton) {
+                backToAnatomyButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(anatomyPage);
+                });
+            }
+
+            if (backToMainFromPharmaButton) {
+                backToMainFromPharmaButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(mainContentWrapper);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
